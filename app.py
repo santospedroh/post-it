@@ -1,19 +1,9 @@
 from flask import Flask, render_template, request
-#from flask_wtf.csrf import CSRFProtect
-from datetime import date
+from flask_wtf.csrf import CSRFProtect
 import sqlite3
-import os
 
 app = Flask(__name__)
-#csrf = CSRFProtect(app)
-
-exemple = [
-{
-    'nome': 'Pedro Santos',
-    'mensagem': 'App Python Flask com acesso ao banco de dados MySQL. Aqui você pode deixar uma mensagem de texto. 🧑🏻‍💻 🚀 ',
-    'criado_em': 'April 18, 2021'
-}
-]
+csrf = CSRFProtect(app)
 
 def consult():
     # conexao
@@ -42,20 +32,17 @@ def home():
             return render_template('index.html', posts = rows, show_modal=False )
         except Exception as e:
             print(e)
-            return render_template('index.html', posts = exemple)
 
     if request.method == "POST":
         try:
             name = request.form["nome"]  
             message = request.form["mensagem"]  
-            save(name, message, )
-            print("Salvando dados no SQLite.") 
-            
+            save(name, message)                     
             rows = consult()
+            print("Salvando dados no SQLite.")   
             return render_template('index.html', posts = rows, show_modal=True)         
         except Exception as e: 
             print(e)
-
 
 if __name__ == '__main__':
     app.run(debug = True)
