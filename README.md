@@ -2,7 +2,7 @@
 
 ## Sobre o projeto 💻
 
-Um App Web simples para salvar mensagens online. O Objetivo do projeto é estudar e reforçar os conhecimentos do curso DevOps Engineering and Cloud Solutions da Mackenzie.
+Um App Web simples para salvar mensagens online. O objetivo do projeto é estudar e reforçar os conhecimentos do curso DevOps Engineering and Cloud Solutions da Mackenzie.
 
 ## Tecnologias usadas 👨‍💻
 
