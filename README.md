@@ -16,8 +16,8 @@ Foi desenvolvido uma aplicação utilizando [Python](https://www.python.org/) e 
 - [SQLite3](https://www.sqlite.org/index.html)
 - [GitHub Actions](https://docs.github.com/en/actions)
 - [Heroku](https://www.heroku.com/)
-- [Azure] (https://azure.microsoft.com/)
-- [SonarCloud] (https://sonarcloud.io/)
+- [Azure](https://azure.microsoft.com/)
+- [SonarCloud](https://sonarcloud.io/)
 
 ## Instalação 🛠
 
