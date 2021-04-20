@@ -1,5 +1,5 @@
 # Definie o nome da pipeline
-name: Build and deploy
+name: CI post-it app
 
 # Evento que vai disparar o Job
 on:
@@ -9,38 +9,15 @@ on:
 
   workflow_dispatch:
 
-#-------------------------------------------------------------------------------#
-#-------------------------------------------------------------------------------#
-# Stage test, build e deploy em Homologação (Heroku)                            #
-#-------------------------------------------------------------------------------#
-#-------------------------------------------------------------------------------#
 jobs:
+
+#-------------------------------------------------------------------------------#
+#-------------------------------------------------------------------------------#
+# Testes                                                                        #
+#-------------------------------------------------------------------------------#
+#-------------------------------------------------------------------------------#
   job1:
-    name: heroku deploy
-    runs-on: ubuntu-latest
-
-    # Checkout código fonte
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
-            
-      - name: Deploy to Heroku
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "post-it-devopslab"
-          heroku_email: "santos.pedroh@gmail.com"
-          procfile: "web: gunicorn app:app"
-          healthcheck: "https://post-it-devopslab.herokuapp.com/health"
-          checkstring: "ok"
-
-#-------------------------------------------------------------------------------#
-#-------------------------------------------------------------------------------#
-# Stage test, build e deploy em Produção (Azure)                                #
-#-------------------------------------------------------------------------------#
-#-------------------------------------------------------------------------------#
-  job2:
-    name: Azure deploy
+    name: Testes
     runs-on: ubuntu-latest
 
     # Checkout código fonte
@@ -71,7 +48,7 @@ jobs:
         pip install pytest
         pip install pytest-cov
         pip install coverage
-        coverage run test.py 
+        coverage run test_core.py 
         coverage report app.py
         coverage xml app.py
       
@@ -84,8 +61,40 @@ jobs:
           . 
           !venv/
 
-  # Definir o Deploy no Azure Web App
-  deploy:
+###-- END Job1 ---###
+
+#-------------------------------------------------------------------------------#
+#-------------------------------------------------------------------------------#
+# Build e deploy em Homologação (Heroku)                                        #
+#-------------------------------------------------------------------------------#
+#-------------------------------------------------------------------------------#
+
+  job2:
+    name: Staging Deploy
+    runs-on: ubuntu-latest
+
+    # Checkout código fonte
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+            
+      - name: Deploy to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "post-it-devopslab"
+          heroku_email: "santos.pedroh@gmail.com"
+          procfile: "web: gunicorn app:app"
+
+###-- END Job2 ---###
+
+#-------------------------------------------------------------------------------#
+#-------------------------------------------------------------------------------#
+# Build e deploy em Produção (Azure)                                            #
+#-------------------------------------------------------------------------------#
+#-------------------------------------------------------------------------------# 
+  job3:
+    name: Production Deploy
     runs-on: ubuntu-latest
     environment:
       name: 'production'
@@ -104,3 +113,5 @@ jobs:
           app-name: 'post-it-devopslab'
           slot-name: 'production'
           publish-profile: ${{ secrets.AzureAppService_PublishProfile_655d664b564740e3af7471bc9651d3ec }}
+
+###-- END Job2 ---###
