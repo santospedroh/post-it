@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request
-from flask_wtf.csrf import CSRFProtect
+#from flask_wtf.csrf import CSRFProtect
 import sqlite3
 
 app = Flask(__name__)
-csrf = CSRFProtect(app)
+#csrf = CSRFProtect(app)
 
 def consult():
     # conexao
@@ -23,17 +23,18 @@ def save(nome, mensagem):
     curr.execute("INSERT into post (nome, mensagem) values (?,?)",(nome,mensagem))  
     conn.commit()  
 
-@app.route("/", methods = ["POST","GET"])
+@app.route("/")
 def home():
-    if request.method == "GET": 
-        try:
-            rows = consult()
-            print("Efetuando consulta no SQLite.") 
-            return render_template('index.html', posts = rows, show_modal=False )
-        except Exception as e:
-            print(e)
+    try:
+        rows = consult()
+        print("Efetuando consulta no SQLite.") 
+        return render_template('index.html', posts = rows, show_modal=False )
+    except Exception as e:
+        print(e)
 
-    if request.method == "POST":
+@app.route("/salvar", methods = ["POST","GET"])
+def salvar():
+     if request.method == "POST":
         try:
             name = request.form["nome"]  
             message = request.form["mensagem"]  
