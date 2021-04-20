@@ -16,7 +16,7 @@ jobs:
 #-------------------------------------------------------------------------------#
 #-------------------------------------------------------------------------------#
   job1:
-    name: Testes
+    name: Unit Tests
     runs-on: ubuntu-latest
 
     # Checkout código fonte
@@ -68,7 +68,7 @@ jobs:
 #-------------------------------------------------------------------------------#
 #-------------------------------------------------------------------------------#
   job2:
-    name: SonarCloud
+    name: Quality Test SonarCloud
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -84,7 +84,7 @@ jobs:
 
 #-------------------------------------------------------------------------------#
 #-------------------------------------------------------------------------------#
-# Build e deploy em Homologação (Heroku)                                        #
+# Deploy em Homologação (Heroku)                                                #
 #-------------------------------------------------------------------------------#
 #-------------------------------------------------------------------------------#
 
@@ -95,11 +95,15 @@ jobs:
     environment:
       name: 'staging'
 
-    # Checkout código fonte
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
-            
+      # Download package app
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: python-app
+          path: .
+
+      # Deploy Heroku    
       - name: Deploy to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
@@ -112,20 +116,49 @@ jobs:
 
 #-------------------------------------------------------------------------------#
 #-------------------------------------------------------------------------------#
-# Build e deploy em Produção (Azure)                                            #
+# Testing em Homologação                                                        #
 #-------------------------------------------------------------------------------#
 #-------------------------------------------------------------------------------# 
+
   job4:
-    name: Production Deploy
     runs-on: ubuntu-latest
     needs: job3
+    steps:
+    # curl na rota /. Method GET na URL de homologação
+    - name: curl
+      uses: wei/curl@master
+      with:
+        args: -I https://post-it-devopslab.herokuapp.com
+
+    # curl na rota /salvar. Method POST na URL de homologação
+    - name: curl
+      uses: wei/curl@master
+      with:
+        args: -X POST -F 'nome=Robot CI' -F 'mensagem=Teste de formulario CI' https://post-it-devopslab.herokuapp.com/salvar
+
+###-- END Job4 ---###
+
+#-------------------------------------------------------------------------------#
+#-------------------------------------------------------------------------------#
+# Deploy em Produção (Azure)                                                    #
+#-------------------------------------------------------------------------------#
+#-------------------------------------------------------------------------------# 
+  job5:
+    name: Production Deploy
+    runs-on: ubuntu-latest
+    needs: [job3, job4]
     environment:
       name: 'production'
 
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
+      # Download package app
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: python-app
+          path: .
         
+      # Deploy Azure
       - name: 'Deploy to Azure'
         uses: azure/webapps-deploy@v2
         with:
@@ -134,3 +167,17 @@ jobs:
           publish-profile: ${{ secrets.AzureAppService_PublishProfile_655d664b564740e3af7471bc9651d3ec }}
 
 ###-- END Job4 ---###
+
+#-------------------------------------------------------------------------------#
+#-------------------------------------------------------------------------------#
+# Testing em Produção                                                           #
+#-------------------------------------------------------------------------------#
+#-------------------------------------------------------------------------------# 
+  job6:
+      runs-on: ubuntu-latest
+      steps:
+      # curl method GET na URL de homologação
+      - name: curl
+        uses: wei/curl@v1
+        with:
+          args: -I https://post-it-devopslab.azurewebsites.net
