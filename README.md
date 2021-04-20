@@ -1,6 +1,6 @@
 # Post-it 📌
 
-(https://github.com/santospedroh/post-it/actions/workflows/main_post-it-devopslab.yml/badge.svg)
+![fluxo de trabalho de exemplo](https://github.com/santospedroh/post-it/actions/workflows/main_post-it-devopslab.yml/badge.svg)
 
 ## Sobre o projeto 💻
 
