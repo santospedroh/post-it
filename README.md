@@ -1,5 +1,7 @@
 # Post-it 📌
 
+[workflow](https://github.com/santospedroh/post-it/actions/workflows/main_post-it-devopslab.yml/badge.svg)
+
 ## Sobre o projeto 💻
 
 Um App Web simples para salvar mensagens online. O objetivo do projeto é estudar e reforçar os conhecimentos do curso DevOps Engineering and Cloud Solutions da Mackenzie.
