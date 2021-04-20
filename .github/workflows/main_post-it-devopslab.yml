@@ -19,96 +19,99 @@ on:
 #-------------------------------------------------------------------------------#
 #-------------------------------------------------------------------------------#
 jobs:
+  heroku:
+    name: heroku
 
-  # Servidor Ubuntu
-  build:
-    runs-on: ubuntu-latest
+      # Servidor Ubuntu
+      build:
+        runs-on: ubuntu-latest
 
-    # Checkout código fonte
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
-        
-      - name: Deploy to Heroku
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "post-it-devopslab"
-          heroku_email: "santos.pedroh@gmail.com"
-          procfile: "web: gunicorn app:app"
-          healthcheck: "https://post-it-devopslab.herokuapp.com/health"
-          checkstring: "ok"
+        # Checkout código fonte
+        steps:
+          - name: Check out repository
+            uses: actions/checkout@v2
+            
+          - name: Deploy to Heroku
+            uses: akhileshns/heroku-deploy@v3.12.12
+            with:
+              heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+              heroku_app_name: "post-it-devopslab"
+              heroku_email: "santos.pedroh@gmail.com"
+              procfile: "web: gunicorn app:app"
+              healthcheck: "https://post-it-devopslab.herokuapp.com/health"
+              checkstring: "ok"
 
 #-------------------------------------------------------------------------------#
 #-------------------------------------------------------------------------------#
 # Stage test, build e deploy em Produção (Azure)                                #
 #-------------------------------------------------------------------------------#
 #-------------------------------------------------------------------------------#
-jobs:
+  Azure:
+    name: Azure
 
-  # Servidor Ubuntu
-  build:
-    runs-on: ubuntu-latest
+    # Servidor Ubuntu
+    build:
+      runs-on: ubuntu-latest
 
-    # Checkout código fonte
-    steps:
-    - uses: actions/checkout@v2
+      # Checkout código fonte
+      steps:
+      - uses: actions/checkout@v2
 
-    # Instalação Python3
-    - name: Set up Python version
-      uses: actions/setup-python@v1
-      with:
-        python-version: '3.8'
+      # Instalação Python3
+      - name: Set up Python version
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.8'
 
-    # Cria virtual env Python
-    - name: Create and start virtual environment
-      run: |
-        python -m venv venv
-        source venv/bin/activate
+      # Cria virtual env Python
+      - name: Create and start virtual environment
+        run: |
+          python -m venv venv
+          source venv/bin/activate
 
-    # Instalação de Módulos que são necessários para a Aplicação. 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      # Instalação de Módulos que são necessários para a Aplicação. 
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        
+      # Executa scripts de teste (PyTest, Django test suites, etc.)
+      - name: Execute tests
+        run: |
+          pip install pytest
+          pip install pytest-cov
+          pip install coverage
+          coverage run test.py 
+          coverage report app.py
+          coverage xml app.py
       
-    # Executa scripts de teste (PyTest, Django test suites, etc.)
-    - name: Execute tests
-      run: |
-        pip install pytest
-        pip install pytest-cov
-        pip install coverage
-        coverage run test.py 
-        coverage report app.py
-        coverage xml app.py
-    
-    # Checkin código fonte
-    - name: Upload artifact for deployment jobs
-      uses: actions/upload-artifact@v2
-      with:
-        name: python-app
-        path: |
-          . 
-          !venv/
-
-  # Definir o Deploy no Azure Web App
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v2
+      # Checkin código fonte
+      - name: Upload artifact for deployment jobs
+        uses: actions/upload-artifact@v2
         with:
           name: python-app
-          path: .
-      
-      - name: 'Deploy to Azure Web App'
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'post-it-devopslab'
-          slot-name: 'production'
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_655d664b564740e3af7471bc9651d3ec }}
+          path: |
+            . 
+            !venv/
+
+    # Definir o Deploy no Azure Web App
+    deploy:
+      runs-on: ubuntu-latest
+      needs: build
+      environment:
+        name: 'production'
+        url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+      steps:
+        - name: Download artifact from build job
+          uses: actions/download-artifact@v2
+          with:
+            name: python-app
+            path: .
+        
+        - name: 'Deploy to Azure Web App'
+          uses: azure/webapps-deploy@v2
+          with:
+            app-name: 'post-it-devopslab'
+            slot-name: 'production'
+            publish-profile: ${{ secrets.AzureAppService_PublishProfile_655d664b564740e3af7471bc9651d3ec }}
