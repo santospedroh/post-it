@@ -1,7 +1,6 @@
 # Post-it 📌
 
-![build](https://github.com/santospedroh/post-it/actions/workflows/main_post-it-devopslab.yml/badge.svg)
-
+![build](https://github.com/santospedroh/post-it/actions/workflows/main_post-it-devopslab.yml/badge.svg) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=santospedroh_post-it&metric=alert_status) [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=santospedroh_post-it&metric=security_rating)
 ## Sobre o projeto 💻
 
 Um App Web simples para salvar mensagens online. O objetivo do projeto é estudar e reforçar os conhecimentos do curso DevOps Engineering and Cloud Solutions da Mackenzie.

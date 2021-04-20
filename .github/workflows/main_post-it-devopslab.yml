@@ -95,12 +95,9 @@ jobs:
       name: 'staging'
 
     steps:
-      # Download package app
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v2
-        with:
-          name: python-app
-          path: .
+      # Check out repository
+      - name: Check out repository
+        uses: actions/checkout@v2
 
       # Deploy Heroku    
       - name: Deploy to Heroku
@@ -150,12 +147,9 @@ jobs:
       name: 'production'
 
     steps:
-      # Download package app
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v2
-        with:
-          name: python-app
-          path: .
+      # Check out repository
+      - name: Check out repository
+        uses: actions/checkout@v2
         
       # Deploy Azure
       - name: 'Deploy to Azure'
