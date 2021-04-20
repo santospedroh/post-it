@@ -1,15 +1,23 @@
 # Post-it 📌
 
-![build](https://github.com/santospedroh/post-it/actions/workflows/main_post-it-devopslab.yml/badge.svg) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=santospedroh_post-it&metric=alert_status) [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=santospedroh_post-it&metric=security_rating)
+![build](https://github.com/santospedroh/post-it/actions/workflows/main_post-it-devopslab.yml/badge.svg) ![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=santospedroh_post-it&metric=alert_status) ![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=santospedroh_post-it&metric=security_rating)
+
 ## Sobre o projeto 💻
 
-Um App Web simples para salvar mensagens online. O objetivo do projeto é estudar e reforçar os conhecimentos do curso DevOps Engineering and Cloud Solutions da Mackenzie.
+App Web simples para salvar mensagens em formato de post-it. O objetivo do projeto é reforçar os conhecimentos que foram aprendidos na disciplina DevOps Tools do curso DevOps Engineering and Cloud Solutions da Mackenzie.
 
-## Tecnologias usadas 👨‍💻
+Foi desenvolvido uma aplicação utilizando [Python](https://www.python.org/) e [Flask](https://flask.palletsprojects.com/en/1.1.x/). Também foi criada uma pipeline utilizando o [GitHub Actions](https://docs.github.com/en/actions) como ferramenta de CI para automatização dos teste unitários, testes de qualidade, testes funcionais, build e deploy nos ambientes de Homologação e Produção.
 
+## Tecnologias utilizadas 👨‍💻
+
+- [Git](https://git-scm.com)
 - [Python](https://www.python.org/)
 - [Flask](https://flask.palletsprojects.com/en/1.1.x/)
 - [SQLite3](https://www.sqlite.org/index.html)
+- [GitHub Actions](https://docs.github.com/en/actions)
+- [Heroku](https://www.heroku.com/)
+- [Azure] (https://azure.microsoft.com/)
+- [SonarCloud] (https://sonarcloud.io/)
 
 ## Instalação 🛠
 
@@ -35,7 +43,6 @@ $ git clone git@github.com:santospedroh/post-it.git
 2. Flask Wtf: `pip install flask_wtf`
 3. Pytest: `pip install pytest`
 4. Coverage: `pip install coverage`
-5. Sqlite3: `pip install sqlite`
 
 ### Criando banco de dados SQLite
 
@@ -62,9 +69,8 @@ Você precisa mover o arquivos `post-it-database.db` para o diretório raiz do p
 ### Start App 
 
 1. Para executar o projeto digite no terminal : $ `python3 app.py`	
-2. Abra o navegador web e acesse: <http://localhost:5000>
+2. Abra o navegador web e acesse: <http://127.0.0.1:5000>
 3. Pronto, aplicação executando!
-
 
 ---
 
