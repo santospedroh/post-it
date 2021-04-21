@@ -121,13 +121,13 @@ jobs:
     needs: job3
     steps:
     # curl na rota /. Method GET na URL de homologação
-    - name: curl
+    - name: curl GET /
       uses: wei/curl@master
       with:
         args: -I https://post-it-devopslab.herokuapp.com
 
     # curl na rota /salvar. Method POST na URL de homologação
-    - name: curl
+    - name: curl POST /salvar
       uses: wei/curl@master
       with:
         args: -X POST -F 'nome=Robot CI' -F 'mensagem=Teste de formulario CI' https://post-it-devopslab.herokuapp.com/salvar
@@ -172,7 +172,7 @@ jobs:
       needs: job5
       steps:
       # curl method GET na URL de homologação
-      - name: curl
+      - name: curl GET /
         uses: wei/curl@v1
         with:
           args: -I https://post-it-devopslab.azurewebsites.net
