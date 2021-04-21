@@ -16,6 +16,6 @@ class Test(unittest.TestCase):
         self.assertEqual(self.result.status_code, 200)  
 
 if __name__ == "__main__":                                                                                                                                                                               
-    print ('INICIANDO OS TESTES')                                                                                                                                                                        
+    print('INICIANDO OS TESTES')                                                                                                                                                                        
     print('----------------------------------------------------------------------')                                                                                                                      
     unittest.main(verbosity=2)
